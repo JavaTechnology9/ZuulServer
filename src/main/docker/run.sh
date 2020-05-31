@@ -1,0 +1,18 @@
+#!/bin/sh
+
+echo "********************************************************"
+echo "Waiting for the eureka server to start on port $EUREKASERVER_PORT"
+echo "********************************************************"
+while ! `nc -z eurekaserver  $EUREKASERVER_PORT`; do sleep 3; done
+echo "******* Eureka Server has started"
+
+echo "********************************************************"
+echo "Waiting for the configuration server to start on port $CONFIGSERVER_PORT"
+echo "********************************************************"
+while ! `nc -z configserver $CONFIGSERVER_PORT`; do sleep 3; done
+echo "*******  Configuration Server has started"
+
+echo "********************************************************"
+echo "Starting Zuul Service with $CONFIGSERVER_URI"
+echo "********************************************************"
+java -jar /usr/local/zuulservice/@project.build.finalName@.jar
